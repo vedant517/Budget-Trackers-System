@@ -1,0 +1,146 @@
+<?php 
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['username'])) {
+    $_SESSION['msg'] = "You must log in first";
+    header('location: login.php');  // Redirect to login page if not logged in
+    exit();
+}
+
+if (isset($_GET['logout'])) {
+    session_destroy();
+    unset($_SESSION['username']);
+    header("location: login.php");  // Logout and redirect to login
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Tracker System</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="./style1.css">
+</head>
+<body>
+    
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Budget Tracker</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./add_income.html">Incomes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./expenses.html">Expenses</a> <!-- Direct link to expense history page -->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./goal_history.html">Goal History</a> <!-- New Goal History button -->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?logout='1'" style="color: red;">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main">
+        <h1 class="text-center mt-4">Budget Tracker System</h1>
+
+        <div class="budget-container row mt-4">
+            <div class="add-container col-12 col-md-4">
+                <div class="add-budget-container">
+                    <h4>Add Budget</h4>
+                    <form>
+                        <div class="form-group">
+                            <label for="budget">Budget:</label>
+                            <input class="form-control" type="text" id="budget">
+                        </div>
+                        <button class="btn btn-primary form-control">Add Budget</button>
+                    </form>
+                </div>
+                <div class="add-expense-container mt-4">
+                    <h4>Add Expense</h4>
+                    <form>
+                        <div class="form-group">
+                            <label for="expense">Expense Title:</label>
+                            <input class="form-control" type="text" id="expense">
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Amount:</label>
+                            <input class="form-control" type="text" id="amount">
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date:</label>
+                            <input class="form-control" type="date" id="date">
+                        </div>
+                        <button class="btn btn-primary form-control">Add Expense</button>
+                    </form>
+                </div>
+                <button class="btn btn-danger form-control mt-2" onclick="resetAll()">Reset All</button>
+                <button class="btn btn-success form-control mt-2" onclick="sendEmailReport()">Send Monthly Report</button>
+            </div>
+
+            <div class="display-container col-12 col-md-8">
+                <div class="heading row" style="display: flex; justify-content: space-around;">
+                    <div class="alert alert-primary" role="alert">
+                        Total Budget: <span id="totalBudget">100</span>
+                    </div>
+                    <div class="alert alert-primary" role="alert">
+                        Total Expenses: <span id="totalExpenses">100</span>
+                    </div>
+                    <div class="alert alert-primary" role="alert">
+                        Budget Left: <span id="budgetLeft">100</span>
+                    </div>
+                </div>
+                <hr>
+                <div class="table-container table-responsive">
+                    <h5>Expense History:</h5>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Expense Name</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- Dynamic Expense rows will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Monthly Expense Report -->
+                <div class="monthly-report mt-4">
+                    <h3>Monthly Expense Report</h3>
+                    <!-- Monthly report will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script JS -->
+    <script src="./script.js"></script>
+</body>
+</html>
